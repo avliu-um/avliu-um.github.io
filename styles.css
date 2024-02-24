@@ -1,0 +1,54 @@
+/*styles.css*/
+
+/* needed to flush menu with top of screen */
+nav {
+    top: 0;
+    left: 0;
+    position: fixed;
+}
+nav ul {
+    margin: 0;
+    padding: 0;
+}
+
+/* Move html below the menu */
+body {
+    padding-top: 50px;
+}
+
+/*override float:left in the next section so that dropdown drops, well, down*/
+nav .dropdown-content li{
+    float:none;
+}
+
+/* all list items */
+nav li{
+  overflow: hidden;
+  background-color: #333;
+  float: left;
+  text-align: center;
+  padding: 20px 10px;
+}
+
+/* all list items when hovered over */
+nav li:hover {
+  background-color: darkgrey;
+}
+
+/* all links inside list items */
+nav li a{
+  color: #f2f2f2;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+/* Dropdown Content (Hidden by default) */
+nav .dropdown-content {
+    display: none;
+    position: fixed;
+}
+
+/* Show the dropdown menu on hover */
+nav .dropdown:hover .dropdown-content {
+    display: block;
+}
