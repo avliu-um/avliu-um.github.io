@@ -1,13 +1,27 @@
 /*styles.css*/
 
-/* fits text within certain width */
+html {
+  scroll-padding-top: 70px; /* height of sticky header */
+}
+
+/*table of contents */
+#main-toc {
+    float: left;
+    margin-top: 20px;
+    margin-left: 10%;
+    position: fixed;
+}
+#main-toc, #table-of-contents a{
+    font-family: "Verdana";
+    color: #2b7b89;
+}
 
 /* needed to flush footer with bottom of screen */
 body {
     margin: 0;
 }
-main{
-    margin-left: 20%;
+#main-content{
+    margin-left: 30%;
     margin-right: 20%;
     margin-top: 100px;
     margin-bottom: 100px;
@@ -19,6 +33,7 @@ header, header ul, footer {
 }
 
 header, header a, footer{
+    font-family: "Verdana";
     text-decoration: none;
     color: darkgrey;
 }
