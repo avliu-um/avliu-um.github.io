@@ -1,73 +1,84 @@
 /*styles.css*/
 
+/* fits text within certain width */
+
+/* needed to flush footer with bottom of screen */
+body {
+    margin: 0;
+}
+main{
+    margin-left: 20%;
+    margin-right: 20%;
+    margin-top: 100px;
+    margin-bottom: 100px;
+}
+
 /* HEADER MENU */
-/* needed to flush menu with top of screen */
-nav {
+header, header ul, footer {
+    background-color: #2b7b89;
+}
+
+header, header a, footer{
+    text-decoration: none;
+    color: darkgrey;
+}
+footer a{
+    color: darkgrey;
+}
+
+#homepage a{
+    color: white
+}
+
+/* all list items when hovered over */
+header li a:hover, #homepage a:hover{
+  background-color: darkgrey;
+  color: #2b7b89;
+}
+
+header {
+    height: 60px;
     top: 0;
     left: 0;
     position: fixed;
+    font-size: 17px;
+    width: 100%;
 }
-nav ul {
+header ul {
     margin: 0;
     padding: 0;
 }
 
-/* Move html below the menu */
-body {
-    padding-top: 50px;
-}
-
-/*override float:left in the next section so that dropdown drops, well, down*/
-nav .dropdown-content li{
+/*override float: left in the next section so that dropdown drops, well, down*/
+header .dropdown-content li{
     float:none;
 }
 
 /* all list items */
-nav li{
+header li{
   overflow: hidden;
-  background-color: #333;
   float: left;
-  text-align: center;
   padding: 20px 10px;
 }
 
-/* all list items when hovered over */
-nav li:hover {
-  background-color: darkgrey;
-}
-
-/* all links and text inside list items */
-nav li a{
-  color: #f2f2f2;
-  text-decoration: none;
-  font-size: 17px;
-}
-nav li{
-  color: #f2f2f2;
-  text-decoration: none;
-  font-size: 17px;
-}
 
 
 /* Dropdown Content (Hidden by default) */
-nav .dropdown-content {
+header .dropdown-content {
     display: none;
     position: fixed;
 }
 
 /* Show the dropdown menu on hover */
-nav .dropdown:hover .dropdown-content {
+header .dropdown:hover .dropdown-content {
     display: block;
 }
 
 
 /* FOOTER */
-footer p{
-    background-color: #333;
-    color: white;
-    padding: 12px;
-}
-footer p a{
-    background-color: #333;
-    color: white;
+footer {
+    text-align: right;
+    font-size: 12px;
+    height: 25px;
+    padding: 10px;
 }
