@@ -1,22 +1,36 @@
 /*styles.css*/
 
+
+/* RESUME
+Styles for the project title and date aligned to the right */
+.project-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline; /* Align the baseline of the title and date for cleaner look */
+  margin-bottom: 5px;
+  margin-left: 0;
+}
+h2 {
+    text-align: center;
+}
+
+
+/* SOCIAL MEDIA ICONS */
 div#sm-icons {
     float: right;
-    margin: 0px 10px;
+    margin: 0px 15px;
 }
-/* social media icons */
 a[class^="fa fa"] {
     color: white;
     padding: 20px 10px;
     font-size: 20px;
 }
 
-/* table of contents */
+/* TABLE of CONTENTS */
 
 #main-toc {
     float: left;
-    margin-top: 20px;
-    margin-left: 10%;
+    margin-left: 2%;
     position: fixed;
 }
 #main-toc, #table-of-contents a{
@@ -32,7 +46,7 @@ body {
     margin: 0;
 }
 #main-content{
-    margin-left: 30%;
+    margin-left: 20%;
     margin-right: 20%;
     margin-top: 100px;
     margin-bottom: 100px;
@@ -72,6 +86,7 @@ header {
 }
 header ul{
     margin: 0;
+    margin-left: 10px;
     padding: 0;
 }
 

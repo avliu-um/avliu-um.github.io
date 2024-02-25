@@ -10,7 +10,7 @@
     @param styleItem function Function that accepts text:string, level:int and itemAnchor:string to style toc entry, default renderer is set already (check source for usage).
     @return string HTML table of contents
     */
-    function generateTableOfContents(maxHeaderLevel = 3, styleItem = function (text, level, itemAnchor) {
+    function generateTableOfContents(maxHeaderLevel = 4, styleItem = function (text, level, itemAnchor) {
         var spaces = "&nbsp;".repeat(Math.max(0, (level - 1)) * 3);
         var tocEntry = spaces + '<a href="#' + itemAnchor + '">' + text + '</a><br/>';
         return tocEntry;
