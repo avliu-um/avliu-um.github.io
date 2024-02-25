@@ -1,10 +1,18 @@
 /*styles.css*/
 
-html {
-  scroll-padding-top: 70px; /* height of sticky header */
+div#sm-icons {
+    float: right;
+    margin: 0px 10px;
+}
+/* social media icons */
+a[class^="fa fa"] {
+    color: white;
+    padding: 20px 10px;
+    font-size: 20px;
 }
 
-/*table of contents */
+/* table of contents */
+
 #main-toc {
     float: left;
     margin-top: 20px;
@@ -14,6 +22,9 @@ html {
 #main-toc, #table-of-contents a{
     font-family: "Verdana";
     color: #2b7b89;
+}
+html {
+  scroll-padding-top: 70px; /* avoid the nav bar when clicking on headers */
 }
 
 /* needed to flush footer with bottom of screen */
@@ -59,7 +70,7 @@ header {
     font-size: 17px;
     width: 100%;
 }
-header ul {
+header ul{
     margin: 0;
     padding: 0;
 }
