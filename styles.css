@@ -52,6 +52,7 @@ a[class^="fa fa"] {
     font-family: "Verdana";
     color: #2b7b89;
     text-decoration: none;
+    word-wrap: break-word; /*TODO: Fix this to make toc wrap */
 }
 html {
   scroll-padding-top: 70px; /* avoid the nav bar when clicking on headers */
