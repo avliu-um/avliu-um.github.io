@@ -1,7 +1,141 @@
 ---
-layout: todo
+layout: default
 title: alex
 ---
 
+
 <h1>E-commerce Web Scraping Pipeline</h1>
-<p>TODO</p>
+<h2>Overview</h2>
+
+<p>
+    This project involves the creation of an on-cloud, persistent, web-scraping data pipeline to generate a TB-scale data source for research.
+    In particular, the data spans at least two years of vehicle sale data on large public e-commerce platforms
+    The generated data supports research groups at both the School of Information and School of Environment and Sustainability, at the University of Michigan.
+</p>
+<p>
+    I served as the primary data engineer on this project, performing roles encompassing cloud infrastructure development, web scraping development, and site reliability engineering.
+    I also served as the primary consultant for the research groups, leading stakeholder meetings to discover data requirements, configure data access patterns, and explain performance/cost/reliability trade-offs.
+</p>
+
+<p>
+    The pipeline went through two key <a href="#highlights">changes</a>:
+    <ul>
+        <li>Scaling pipeline throughput 100x</li>
+        <li>Redesigning pipeline to save costs by more than 2x</li>
+    </ul>
+</p>
+
+<h2>Technical Components</h2>
+
+<div class="image">
+    <img src="/images/ev_p2.png" alt="Systems design diagram of data pipeline.">
+    <figcaption>Systems design diagram of data pipeline.</figcaption>
+</div>
+
+
+<h3>Technologies and Tools</h3>
+<ul>
+    <li>Web scraping: Selenium, BeautifulSoup</li>
+    <li>Data processing: Python, Pandas, json (package)</li>
+    <li>CICD and Containerization: Docker, Terraform, Git, Bash</li>
+    <li>Cloud technologies: AWS Batch, CloudWatch EventBridge, Lambda, S3, SQS, RDS</li>
+</ul>
+
+<h3>Requirements</h3>
+
+<p>Data requirements:</p>
+<ul>
+    <li>Subjects: Vehicle listings on several e-commerce platforms, across 17 major American cities</li>
+    <li>Scraping rate and length: Once a day, every day, for 2+ years.</li>
+    <li>Columns (researcher-defined): Essential (VIN#, price, etc.), Important (make, model, etc.), and Nice to Have (seller description, etc.)</li>
+    <li>Freshness: Price changes should be captured at a daily granularity; other data should be as fresh as the last time the price changed.</li>
+</ul>
+
+<p>Scale:</p>
+<ul>
+    <li>Up to 200k new listings encountered per day, 20k of which are new.</li>
+    <li>End user receives about 0.5GB data per day.</li>
+</ul>
+
+<p>Fault tolerance, data backup, and safety:</p>
+<ul>
+    <li>Data stores should be protected from outside interference; No need to encrypt data at rest since information is publicly accessible.</li>
+    <li>Telemetry should identify scraping and pipeline issues day-of.</li>
+    <li>Should be able to reconstruct end-user datasets, backwards in time if necessary, even if key services fail.</li>
+</ul>
+
+<h3>Services</h3>
+Search job (AWS Batch job)
+<ul>
+    <li>Interact with e-commerce platforms by performing searches for vehicles.</li>
+    <li>Submit scrape-job (see below) for listings that need scraping (i.e. they are new or prices have changed)</li>
+    <li>Update data stores.</li>
+</ul>
+Scrape job (AWS Batch job)
+<ul>
+    <li>Load listing and scrape required attributes.</li>
+    <li>Save html copy as backup.</li>
+    <li>Update data stores.</li>
+</ul>
+Data fetcher (UM Server cron job)
+<ul>
+    <li>Automatically generate researchers' end datasets.</li>
+</ul>
+Telemetry (AWS Lambda function)
+<ul>
+    <li>Automatically report health, status, and behavior of pipeline components.</li>
+    <li>Email daily reports to team to quickly identify anomalies and issues.</li>
+</ul>
+
+<h2 id="highlights">Highlighted tasks</h2>
+
+<h3 id="scale">Scaling pipeline 100x</h3>
+
+<p>Before Fall of 2023 the stakeholders were interested in researching only Electric Vehicles.
+Later, we realized that they also wanted to capture <em>all</em> vehicle data, and not just EV's.
+Practically, this resulted in a 100x increase in throughput of our pipeline</p>
+
+<p>
+From a project management standpoint, I took the lead explicating the engineering challenges to both the
+<a href="https://docs.google.com/presentation/d/1axOfeCKilVwXNN66IfENBUIb2ndX2FylIH8SgSYJf20" target="_blank">stakeholders</a>
+and the
+<a href="https://docs.google.com/presentation/d/1GGORJp4G8-d2mmVEec_c2k8xAsGQ4tLPEh1MlRiqUBk" target="_blank">engineering team</a>
+.
+</p>
+
+<p>From a technical standpoint, I quickly realized that every component of the pipeline would be stressed at the 100x level.
+A quick summary of changes I implemented:</p>
+<ul>
+    <li>I developed telemetry code to determine whether code changes and features worked at scale.</li>
+    <li>
+        I improved and abstracted services to handle 100x usage, in volume and parallel invocation.
+        <ul>
+            <li>For search-jobs, I implemented recursive web crawling to mimic pagination; I also pre-tested recursion trees to determine strategic start nodes that keep platform GET requests low.</li>
+            <li>For data-jobs, I abstracted the number of URLs scraped per job; Through pretesting I increased this number to decrease data-jobs per day, but not too much to trigger platform blockage.</li>
+            <li>Similarly, for Lambdas I abstracted the number of S3 files processed per function call, and increased this number to balance between Lambda invoke time and Lambda execution time.</li>
+            <li>I  spaced out Lambda invokes in time to avoid too many connections to DB.</li>
+        </ul>
+    </li>
+    <li>For the database, I implemented indices on columns that were frequently filtered on; I also started implementing a retention period to keep the size below capacity.</li>
+    <li>I implemented visibility timeouts on SQS messages to avoid duplicate message sends.</li>
+</ul>
+
+<h3 id="p2">Cutting costs by half (at least)</h3>
+
+<p>After adjusting the pipeline to accommodate a 100x throughput, we quickly realized that the costs of our pipeline would be tremendous, and increase month over month.
+So, I redesigned the pipeline, including components and services, to decrease costs while maintaining requirements.</p>
+
+<p>My first step after redesigning was to perform a cost/benefit analysis:</p>
+<ul>
+    <li>Costs included time to implement and the decrease in data freshness and granularity.</li>
+    <li>Benefits included saving at least 50% on compute costs, 10x on storage costs, and a 10x increase in DB data retention period.</li>
+    <li>In the end, we confirmed with stakeholders that the costs were absolutely worth the benefits.</li>
+</ul>
+
+<p>From a technical standpoint, I implemented the following changes:</p>
+<ul>
+    <li>I again increased the number of URL scraping tasks per data-job, cutting Batch costs in half.</li>
+    <li>I redesigned the Database schema to decrease redundancies and sacrifice some granularity, increasing capacity by 10x.</li>
+    <li>I added logic for calling data-jobs, calling it only if the price changed or the URL is new, which decreased Batch calls for those jobs by 10x.</li>
+    <li>I changed S3 insertion based off the same logic, which made S3 costs increase at a rate 10x less than before.</li>
+</ul>

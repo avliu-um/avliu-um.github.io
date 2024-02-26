@@ -1,6 +1,21 @@
 /*styles.css*/
 
 
+/* IMAGES */
+div.image {
+    text-align: center; /*center it*/
+}
+img {
+    width: 100%;
+    height: 100%;
+    border: 2px solid #555;
+}
+figcaption {
+  font-style: italic;
+  padding: 2px;
+  text-align: center;
+}
+
 /* RESUME
 Styles for the project title and date aligned to the right */
 .project-title {
@@ -36,6 +51,7 @@ a[class^="fa fa"] {
 #main-toc, #table-of-contents a{
     font-family: "Verdana";
     color: #2b7b89;
+    text-decoration: none;
 }
 html {
   scroll-padding-top: 70px; /* avoid the nav bar when clicking on headers */
